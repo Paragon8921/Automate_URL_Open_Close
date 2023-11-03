@@ -1,17 +1,6 @@
 'use strict';
 
-const uris = [
-  'https://qa-advr.iscs.com/application/AP-00017251',
-  'https://qa-advr.iscs.com/application/QT-00018925',
-  'https://qa-advr.iscs.com/application/AP-00017397',
-  'https://qa-advr.iscs.com/application/QT-00019714',
-  'https://qa-advr.iscs.com/application/QT-00017095',
-  'https://qa-advr.iscs.com/application/QT-00018924',
-  'https://qa-advr.iscs.com/application/QT-00017805',
-  'https://qa-advr.iscs.com/application/AP-00012539',
-  'https://qa-advr.iscs.com/policy/SBP3400-4642-01',
-  'https://qa-advr.iscs.com/application/QT-00014648',
-];
+let urls = [];
 
 const loadDataBtn = document.querySelector('.load_data');
 let time = 0;
@@ -26,7 +15,7 @@ function delay(ms) {
 
 const loadData = async function () {
   const intervalId = setInterval(timer, 1000);
-  for (let key of uris) {
+  for (let key of urls) {
     const newWindow = window.open(key, '_blank');
     console.log(`Opened: ${key}`);
     await delay(500);
@@ -38,3 +27,21 @@ const loadData = async function () {
 };
 
 loadDataBtn.addEventListener('click', loadData);
+
+///////////////////////////////////////////////////
+///////////////// File Reader ////////////////////
+//////////////////////////////////////////////////
+
+let data = document.getElementById('fileToLoad');
+let fileOutput = document.getElementById('data-output');
+
+data.addEventListener('change', function () {
+  let fileReader = new FileReader();
+
+  fileReader.onload = function () {
+    fileOutput.textContent = fileReader.result;
+    urls = fileOutput.textContent.split(/\r?\n/);
+    console.log(urls);
+  };
+  fileReader.readAsText(this.files[0]);
+});
